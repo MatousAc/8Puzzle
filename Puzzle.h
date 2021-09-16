@@ -10,7 +10,6 @@
 using std::cout;
 using std::cin;
 using std::endl;
-using std::string;
 
 class Puzzle
 {
@@ -43,6 +42,11 @@ private:
 	/// size of grid
 	/// </summary>
 	int n{ 3 };
+	/// <summary>
+	/// the current index of 
+	/// the missing tile
+	/// </summary>
+	int hole_ind{};
 	
 public:
 	///// constructors /////
@@ -52,32 +56,17 @@ public:
 	/// creates a solved 3x3 Puzzle. 
 	/// note: 0 is being used for "-"
 	/// </summary>
-	Puzzle();					// empty
+	Puzzle();
 	/// <summary>
 	/// creates an nxn Puzzle from an 
 	/// arr of chars of length n*n
 	/// </summary>
 	/// <param name="s">(a c-style string)</param>
-	Puzzle(const char *chars);	// char arr to int arr
+	Puzzle(const char *chars);
 
 	// Puzzle(const Puzzle& g);	// copy
-	// Puzzle(Puzzle&& g);			// move
+	Puzzle(Puzzle&& puz);		// move
 	~Puzzle();					// destructor
-
-	///// helper methods ////
-	/// <summary>
-	/// returns the value of the nth 
-	/// tile of the Puzzle
-	/// </summary>
-	/// <returns>int</returns>
-	int get_nth(int &index) const;
-
-	/// <summary>
-	/// returns a string representation of
-	/// a Puzzle
-	/// </summary>
-	/// <returns></returns>
-	char* as_chars() const;
 
 	///// operator overloads (as member f(x)s /////
 	
@@ -88,5 +77,29 @@ public:
 	/// are equal
 	/// </summary>
 	bool operator==(const Puzzle& rhs) const;
+
+	///// helper methods ////
+	/// <summary>
+	/// returns the value of the nth 
+	/// tile of the Puzzle
+	/// </summary>
+	/// <returns>int</returns>
+	int get_nth(int& index) const;
+
+	/// <summary>
+	/// returns a string representation of
+	/// a Puzzle
+	/// </summary>
+	/// <returns></returns>
+	char* as_chars() const;
+
+	/// <summary>
+	/// slides tile in specified index
+	/// into the hole_ind
+	/// </summary>
+	/// <param name="ind1"></param>
+	/// <param name="ind2"></param>
+	void slide(int tile_ind);
+	//int legal_moves();
 };
 

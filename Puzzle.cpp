@@ -17,10 +17,11 @@ using std::string;
 Puzzle::Puzzle()
     : grid{ 1, 2, 3,    // default initializations
             4, 5, 6,
-            7, 8, 0 } {}
+            7, 8, 0 },
+    hole_ind{8} {}
 
 Puzzle::Puzzle(const char *chars) // char arr to int arr
-    {
+    : hole_ind {0} {
     if (!chars) {         // check for empty string
         throw std::invalid_argument("received nullptr");
     }
@@ -31,61 +32,27 @@ Puzzle::Puzzle(const char *chars) // char arr to int arr
         {                       
             // here we get the right part of the string and convert it to an integer
             char tile_val_chr = chars[(row * n) + col];
-            if (tile_val_chr == '-')
+            if (tile_val_chr == '-') {
                 tile_val_chr = '0';
+                hole_ind = (row * n) + col;
+            }
             grid[row][col] = (int)tile_val_chr % 48;
         }
     }
 }
-
-
-/// copy consructor
-// Puzzle::Puzzle(const Puzzle& g)
-//     : grid{ nullptr } {
-//     grid = new int[std::strlen(g.grid) + 1];
-//     std::strcpy(grid, g.grid);
-// }
-
-/// move constructor
-// Puzzle::Puzzle(Puzzle&& g)
-//     : grid{ g.grid } {
-//     g.grid = nullptr;
-//     std::cout << "Move constructor used" << std::endl;
-// }
 
 /// destructor
 Puzzle::~Puzzle() {
 }
 
 
-///// helper methods /////
-
-int Puzzle::get_nth(int& index) const {
-    // cout << puz.grid[index / puz.n][index % puz.n] << endl;
-    return (grid[index / n][index % n]);
-}
-
-char* Puzzle::as_chars() const {
-    char* chars = new char[n * n];
-    for (int row = 0; row < n; row++)
-    {
-        for (int col = 0; col < n; col++)
-        {
-            // taking every tile value and putting it back into a character array
-            int val = grid[row][col];
-            chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
-        }
-    }
-    chars[n * n] = '\0';
-    return chars;
-}
 
 ///// operator overloads /////
 
 std::ostream& operator<<(std::ostream& os, const Puzzle& rhs) { // stream insertion operator
-    for (int grid_indx{ 0 }; grid_indx < (rhs.n * rhs.n); grid_indx++) {
-        cout << rhs.get_nth(grid_indx) << " ";
-        if ((grid_indx + 1) % rhs.n == 0)
+    for (int grid_ind{ 0 }; grid_ind < (rhs.n * rhs.n); grid_ind++) {
+        cout << (rhs.grid[grid_ind / rhs.n][grid_ind % rhs.n]) << " "; // .get_nth(grid_ind)
+        if ((grid_ind + 1) % rhs.n == 0)
             cout << endl;
     }
     os << "";
@@ -106,3 +73,29 @@ bool Puzzle::operator==(const Puzzle &rhs) const { // equality overload
     return true;
 }
 
+///// helper methods /////
+
+int Puzzle::get_nth(int& index) const {
+    return (grid[index / n][index % n]);
+}
+
+void Puzzle::slide(int tile_ind) { // swaps elements @ these indices
+    grid[hole_ind / n][hole_ind % n] = (*grid)[tile_ind];
+    grid[tile_ind / n][tile_ind % n] = 0;
+    hole_ind = tile_ind;
+}
+
+char* Puzzle::as_chars() const {
+    char* chars = new char[n * n];
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            // taking every tile value and putting it back into a character array
+            int val = grid[row][col];
+            chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
+        }
+    }
+    chars[n * n] = '\0';
+    return chars;
+}

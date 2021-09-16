@@ -10,7 +10,6 @@
 using std::cout;
 using std::cin;
 using std::endl;
-using std::string;
 
 /// <summary>
 /// This functions mainly tests different search methods
@@ -33,4 +32,17 @@ int main()
     cout << (*puzptr == puz2) << endl;
     cout << (puz3 == puz2) << endl;
     cout << (puz4 == puz2) << endl;
+
+    cout << endl << endl << puz3 << endl;
+    puz3.slide(5);
+    cout << endl << endl << puz3 << endl;
+
+    cout << "Okay, Now were Ready!!" << "\n\n\n";
+    Puzzle solution("12345678-");
+    Puzzle problem("1564-7238");
+    cout << solution << endl;
+    cout << problem << endl;
+
+    
 }
+
