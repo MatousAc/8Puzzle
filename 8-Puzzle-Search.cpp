@@ -7,9 +7,15 @@
 
 #include "Puzzle.h"
 #include <iostream>
+#include <unordered_map>
+//#include "Search.h"
 using std::cout;
 using std::cin;
 using std::endl;
+using std::unordered_map;
+
+/// prototypes
+bool breadth_first_search(const char* seq);
 
 /// <summary>
 /// This functions mainly tests different search methods
@@ -43,6 +49,6 @@ int main()
     cout << solution << endl;
     cout << problem << endl;
 
-    
+    //breadth_first_search("1564-7238");
 }
 

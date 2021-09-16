@@ -41,10 +41,21 @@ Puzzle::Puzzle(const char *chars) // char arr to int arr
     }
 }
 
+Puzzle::Puzzle(const Puzzle& puz) // copy constructor
+    : hole_ind{ 0 } { 
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            // here we copy each element
+            grid[row][col] = puz.grid[row][col];
+        }
+    }
+}
+
 /// destructor
 Puzzle::~Puzzle() {
 }
-
 
 
 ///// operator overloads /////

@@ -11,6 +11,9 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+/// <summary>
+/// An object representing an 8-Puzzle.
+/// </summary>
 class Puzzle
 {
 	///// friends /////
@@ -47,6 +50,7 @@ private:
 	/// the missing tile
 	/// </summary>
 	int hole_ind{};
+
 	
 public:
 	///// constructors /////
@@ -64,7 +68,11 @@ public:
 	/// <param name="s">(a c-style string)</param>
 	Puzzle(const char *chars);
 
-	// Puzzle(const Puzzle& g);	// copy
+	/// <summary>
+	/// duplicates a puzzle
+	/// </summary>
+	/// <param name="puz"></param>
+	Puzzle(const Puzzle& puz);
 	Puzzle(Puzzle&& puz);		// move
 	~Puzzle();					// destructor
 
