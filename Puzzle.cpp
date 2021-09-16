@@ -7,63 +7,33 @@
 
 #include "Puzzle.h"
 #include <iostream>
-#include <math.h>
 using std::cout;
 using std::cin;
 using std::endl;
-using std::atoi;
 using std::string;
 
 ///// constructors /////
 
-/// <summary>
-/// default constructor
-/// creates a solved 3x3 Puzzle 
-/// note: 0 is being used for "-"
-/// </summary>
-/// thanks to Deepak Ingole for explaining how to do this on
-/// https://stackoverflow.com/questions/18273370/the-correct-way-to-initialize-a-dynamic-pointer-to-a-multidimensional-array/18273553
 Puzzle::Puzzle()
-    : grid{ nullptr }, n{ 0 } { // default initializations
-    cout << "default 3x3 Puzzle constructor called" << endl;
-    grid = new int* [3];        // point to 3 pointers
-    grid[0] = new int[1, 2, 3]; // asgn ptr0 to this spec. int arr
-    grid[1] = new int[4, 4, 6];
-    grid[2] = new int[7, 8, 0];
-    n = 3;                      // record size for simplicity
-}
+    : grid{ 1, 2, 3,    // default initializations
+            4, 5, 6,
+            7, 8, 0 } {}
 
-/// <summary>
-/// creates an nxn Puzzle from a 
-/// string of length n*n
-/// </summary>
-/// <param name="s">(a string pointer)</param>
-Puzzle::Puzzle(const char* chars)
+Puzzle::Puzzle(const char *chars) // char arr to int arr
     {
-    cout << "nxn Puzzle constructor called" << endl;
-
-    if (chars == nullptr) {         // check for empty string
+    if (!chars) {         // check for empty string
         throw std::invalid_argument("received nullptr");
     }
 
-    // truncates on purpose, sets size of puzzle. leaves off any extra characters
-    n = sqrt(strlen((chars)));
-    cout << "puzzle is of size " << n << endl;
-    cout << "Char[] Testing:\n" << endl <<
-            "chars:   " << chars << endl <<
-            "*chars:   " << *chars << endl <<
-            "&chars:   " << &chars << endl;
-    grid = new int* [n];
     for (int row = 0; row < n; row++)
     {
-        grid[row] = new int[n];
         for (int col = 0; col < n; col++)
         {                       
             // here we get the right part of the string and convert it to an integer
-            // string* tile_val_chr = s + (row * n) + col;
-            // if (tile_val_chr == "-")
-            //     tile_val_chr = "0";
-            // grid[row][col] = std::atoi(tile_val_chr);
+            char tile_val_chr = chars[(row * n) + col];
+            if (tile_val_chr == '-')
+                tile_val_chr = '0';
+            grid[row][col] = (int)tile_val_chr % 48;
         }
     }
 }
@@ -84,11 +54,55 @@ Puzzle::Puzzle(const char* chars)
 // }
 
 /// destructor
-/// deallocates all memory used for the puzzle representation
 Puzzle::~Puzzle() {
-    for (int row = 0; row < n; row++)   // for all rows
-    {
-        delete[] grid[row];             // deallocate their memory
-    }
-    delete[] grid;                      // deallocate grid's memory
 }
+
+
+///// helper methods /////
+
+int Puzzle::get_nth(int& index) const {
+    // cout << puz.grid[index / puz.n][index % puz.n] << endl;
+    return (grid[index / n][index % n]);
+}
+
+char* Puzzle::as_chars() const {
+    char* chars = new char[n * n];
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            // taking every tile value and putting it back into a character array
+            int val = grid[row][col];
+            chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
+        }
+    }
+    chars[n * n] = '\0';
+    return chars;
+}
+
+///// operator overloads /////
+
+std::ostream& operator<<(std::ostream& os, const Puzzle& rhs) { // stream insertion operator
+    for (int grid_indx{ 0 }; grid_indx < (rhs.n * rhs.n); grid_indx++) {
+        cout << rhs.get_nth(grid_indx) << " ";
+        if ((grid_indx + 1) % rhs.n == 0)
+            cout << endl;
+    }
+    os << "";
+    return os;
+}
+
+bool Puzzle::operator==(const Puzzle &rhs) const { // equality overload
+    // return false if they are of different sizes
+    if (n != rhs.n) return false;
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {   // returns false if an element doesn't match
+            if (grid[row][col] != rhs.grid[row][col]) 
+                return false;
+        }
+    }
+    return true;
+}
+

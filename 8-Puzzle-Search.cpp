@@ -20,7 +20,17 @@ using std::string;
 int main()
 {
     cout << "Starting Main" << endl;
-    Puzzle puz1();
-    puz1.print();
+    Puzzle* puzptr = new Puzzle();
+    cout << (*puzptr);
     Puzzle puz2("1564-7238");
+    cout << puz2;
+    Puzzle puz3("1564-7238");
+    Puzzle puz4("1364-7258");
+
+    // cin >> *puzptr;
+    cout << (puz2.as_chars()) << endl;
+
+    cout << (*puzptr == puz2) << endl;
+    cout << (puz3 == puz2) << endl;
+    cout << (puz4 == puz2) << endl;
 }
