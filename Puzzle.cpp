@@ -132,9 +132,29 @@ int* Puzzle::legal_moves() {
 }
 
 void Puzzle::scramble(const int &moves) { // scrambles a puzzle
+    srand(time(0));
     for (int move_num{ 0 }; move_num < moves; move_num++) {
-        int moves[]{ *(this->legal_moves()) };// get moves
-        srand(time(0));
-        this->slide(rand() % sizeof(moves));
+        // get legal options for this puzzle
+        int num_options{ 0 };
+        int options[]{ 9, 9, 9, 9 };                  // begin with no options
+        if (hole_ind > 2)       // if not on top, allow move up
+            options[num_options++] = hole_ind - 3;
+        if (hole_ind < 6)       // if not on bottom, allow move down
+            options[num_options++] = hole_ind + 3;
+        if (hole_ind % 3 != 0)  // if not on right col, allow move right
+            options[num_options++] = hole_ind - 1;
+        if (hole_ind % 3 != 2) // if not on left col, allow move left
+            options[num_options++] = hole_ind + 1; 
+        
+        int move_to = options[rand() % 4];
+        if (move_to == 9) move_to = options[rand() % 3];
+        if (move_to == 9) move_to = options[rand() % 2];
+        this->slide(move_to);
     }
+}
+
+///// getter /////
+
+int Puzzle::get_hole() const { // hole_ind getter
+    return hole_ind;
 }

@@ -112,7 +112,8 @@ public:
 	/// <summary>
 	/// returns indices of all the tiles
 	/// that can currently slide into
-	/// the empty space (0)
+	/// the empty space (0). it encodes
+	/// them into a 4-digit integer
 	/// </summary>
 	/// <returns></returns>
 	int* legal_moves();
@@ -123,5 +124,13 @@ public:
 	/// </summary>
 	/// <param name="moves"></param>
 	void scramble(const int &moves);
+
+	///// getter /////
+
+	/// <summary>
+	/// fetches hole_ind
+	/// </summary>
+	/// <returns></returns>
+	int get_hole() const;
 };
 

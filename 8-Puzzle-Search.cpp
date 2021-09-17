@@ -49,13 +49,14 @@ int main()
     Puzzle problem("1564-7238");
     cout << solution << endl;
     cout << problem << endl;
-    cout << *(problem.legal_moves()) << endl;
+    //cout << *(problem.legal_moves()) << endl;
 
     // scramble?
     cout << solution << endl; 
-    solution.scramble(12);
+    solution.scramble(3);
     cout << solution << endl;
 
-    //breadth_first_search("1234567-8");
-    //breadth_first_search("1564-7238");
+     // breadth_first_search("1234567-8");
+     // breadth_first_search(solution.as_chars());
+    // breadth_first_search("1564-7238");
 }
