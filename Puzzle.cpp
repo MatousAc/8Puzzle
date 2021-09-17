@@ -42,7 +42,8 @@ Puzzle::Puzzle(const char *chars) // char arr to int arr
 }
 
 Puzzle::Puzzle(const Puzzle& puz) // copy constructor
-    : hole_ind{ 0 } { 
+    : hole_ind{ puz.hole_ind },
+    n{ puz.n } {
     for (int row = 0; row < n; row++)
     {
         for (int col = 0; col < n; col++)
@@ -97,7 +98,8 @@ void Puzzle::slide(int tile_ind) { // swaps elements @ these indices
 }
 
 char* Puzzle::as_chars() const {
-    char* chars = new char[n * n];
+    char* chars = new char[10];  // a place for each tile and one for the end
+    chars[9] = '\0';
     for (int row = 0; row < n; row++)
     {
         for (int col = 0; col < n; col++)
@@ -107,6 +109,32 @@ char* Puzzle::as_chars() const {
             chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
         }
     }
-    chars[n * n] = '\0';
     return chars;
+}
+
+int* Puzzle::legal_moves() {
+    int num_moves{ 0 };
+    int* possible_moves = new int[4];
+    if (hole_ind > 2)       // if not on top, allow move up
+        possible_moves[num_moves++] = hole_ind - 3;
+    if (hole_ind < 6)       // if not on bottom, allow move down
+        possible_moves[num_moves++] = hole_ind + 3;
+    if (hole_ind % n != 0)  // if not on right col, allow move right
+        possible_moves[num_moves++] = hole_ind - 1;
+    if (hole_ind % n != 2) // if not on left col, allow move left
+        possible_moves[num_moves++] = hole_ind + 1;
+    //int moves = new int[num_moves];
+    int* moves = new int[num_moves];
+    for (int move_num{ 0 }; move_num < num_moves; move_num++)
+        moves[move_num] = possible_moves[move_num];
+    delete[] possible_moves;
+    return moves;
+}
+
+void Puzzle::scramble(const int &moves) { // scrambles a puzzle
+    for (int move_num{ 0 }; move_num < moves; move_num++) {
+        int moves[]{ *(this->legal_moves()) };// get moves
+        srand(time(0));
+        this->slide(rand() % sizeof(moves));
+    }
 }

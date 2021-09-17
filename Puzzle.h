@@ -108,6 +108,20 @@ public:
 	/// <param name="ind1"></param>
 	/// <param name="ind2"></param>
 	void slide(int tile_ind);
-	//int legal_moves();
+
+	/// <summary>
+	/// returns indices of all the tiles
+	/// that can currently slide into
+	/// the empty space (0)
+	/// </summary>
+	/// <returns></returns>
+	int* legal_moves();
+
+	/// <summary>
+	/// scrambles the puzzle by the
+	/// specified number of moves
+	/// </summary>
+	/// <param name="moves"></param>
+	void scramble(const int &moves);
 };
 
