@@ -7,16 +7,28 @@
 
 #include "Puzzle.h"
 #include <iostream>
-#include <unordered_map>
-#include <vector>
-//#include "Search.h"
+#include "Search.h"
+#include <chrono>
 using std::cout;
-using std::cin;
 using std::endl;
-using std::unordered_map;
+using std::vector;
 
-/// prototypes
-bool breadth_first_search(const char* seq);
+/// the below code is directly taken from the 
+/// "vectorutils" homework template
+/// written by Dr. Halterman for CPTR-318
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
+    os << '{'; os << '\n';
+    if (!vec.empty()) {
+        auto iter = vec.begin();
+        auto end = vec.end();
+        os << *iter++;
+        while (iter != end)
+            os << "\n" << *iter++;
+    }
+    os << '\n'; os << '}';
+    return os;
+}
 
 /// <summary>
 /// This functions mainly tests different search methods
@@ -25,38 +37,17 @@ bool breadth_first_search(const char* seq);
 /// <returns>default 1 if no errors</returns>
 int main()
 {
-    cout << "Starting Main" << endl;
-    Puzzle* puzptr = new Puzzle();
-    cout << (*puzptr);
-    Puzzle puz2("1564-7238");
-    cout << puz2;
-    Puzzle puz3("1564-7238");
-    Puzzle puz4("1364-7258");
-
-    // cin >> *puzptr;
-    cout << (puz2.as_chars()) << endl;
-
-    cout << (*puzptr == puz2) << endl;
-    cout << (puz3 == puz2) << endl;
-    cout << (puz4 == puz2) << endl;
-
-    cout << endl << endl << puz3 << endl;
-    puz3.slide(5);
-    cout << endl << endl << puz3 << endl;
-
-    cout << "Okay, Now were Ready!!" << "\n\n\n";
-    Puzzle solution("12345678-");
-    Puzzle problem("1564-7238");
-    cout << solution << endl;
-    cout << problem << endl;
-    //cout << *(problem.legal_moves()) << endl;
-
-    // scramble?
-    cout << solution << endl; 
-    solution.scramble(3);
-    cout << solution << endl;
-
-     // breadth_first_search("1234567-8");
-     // breadth_first_search(solution.as_chars());
+    clock_t start, end;             // for timing our algorithms
+    // scramble
+    Puzzle puzzle("12345678-");
+    puzzle.scramble(20);
+    cout << puzzle << endl;
+    start = clock();
+    vector<string> solution_path = breadth_first_search(puzzle.as_string());
+    end = clock();
+    cout << solution_path << endl;
+    cout << "Time to solve: " << ((float)end - start) / CLOCKS_PER_SEC;
     // breadth_first_search("1564-7238");
+
+     //greedy(solution.as_chars());
 }

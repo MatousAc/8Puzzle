@@ -10,6 +10,7 @@
 using std::cout;
 using std::cin;
 using std::endl;
+using std::string;
 
 /// <summary>
 /// An object representing an 8-Puzzle.
@@ -67,13 +68,18 @@ public:
 	/// </summary>
 	/// <param name="s">(a c-style string)</param>
 	Puzzle(const char *chars);
+	/// <summary>
+	/// creates an nxn Puzzle from an 
+	/// arr of chars of length n*n
+	/// </summary>
+	/// <param name="str">(std:string)</param>
+	Puzzle(const string& str);
 
 	/// <summary>
 	/// duplicates a puzzle
 	/// </summary>
 	/// <param name="puz"></param>
 	Puzzle(const Puzzle& puz);
-	Puzzle(Puzzle&& puz);		// move
 	~Puzzle();					// destructor
 
 	///// operator overloads (as member f(x)s /////
@@ -95,11 +101,18 @@ public:
 	int get_nth(int& index) const;
 
 	/// <summary>
-	/// returns a string representation of
-	/// a Puzzle
+	/// returns a c-style string 
+	/// representation of a Puzzle
 	/// </summary>
 	/// <returns></returns>
 	char* as_chars() const;
+
+	/// <summary>
+	/// returns a pointer to a std::string 
+	/// representation of a Puzzle
+	/// </summary>
+	/// <returns></returns>
+	string as_string() const;
 
 	/// <summary>
 	/// slides tile in specified index
@@ -116,7 +129,7 @@ public:
 	/// them into a 4-digit integer
 	/// </summary>
 	/// <returns></returns>
-	int* legal_moves();
+	void set_legal_moves(int moves[]);
 
 	/// <summary>
 	/// scrambles the puzzle by the

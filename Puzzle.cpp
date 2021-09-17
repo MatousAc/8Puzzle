@@ -22,9 +22,8 @@ Puzzle::Puzzle()
 
 Puzzle::Puzzle(const char *chars) // char arr to int arr
     : hole_ind {0} {
-    if (!chars) {         // check for empty string
+    if (!chars)           // check for empty string
         throw std::invalid_argument("received nullptr");
-    }
 
     for (int row = 0; row < n; row++)
     {
@@ -40,6 +39,27 @@ Puzzle::Puzzle(const char *chars) // char arr to int arr
         }
     }
 }
+
+Puzzle::Puzzle(const string& str)   // std:string to int arr
+    : hole_ind{ 0 } {
+    if (str == "")                  // check for empty string
+        throw std::invalid_argument("received empty string");
+
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            // here we get the right part of the string and convert it to an integer
+            char tile_val_chr = str[(row * n) + col];
+            if (tile_val_chr == '-') {
+                tile_val_chr = '0';
+                hole_ind = (row * n) + col;
+            }
+            grid[row][col] = (int)tile_val_chr % 48;
+        }
+    }
+}
+
 
 Puzzle::Puzzle(const Puzzle& puz) // copy constructor
     : hole_ind{ puz.hole_ind },
@@ -112,23 +132,30 @@ char* Puzzle::as_chars() const {
     return chars;
 }
 
-int* Puzzle::legal_moves() {
+string Puzzle::as_string() const { // Puzzle to string convert
+    string str{this->as_chars()};
+    return str;
+//    for (int row = 0; row < n; row++)
+//    {
+//        for (int col = 0; col < n; col++)
+//        {
+//            // taking every tile value and putting it back into a character array
+//            int val = grid[row][col];
+//            chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
+//        }
+//    }
+}
+
+void Puzzle::set_legal_moves(int moves[]) {
     int num_moves{ 0 };
-    int* possible_moves = new int[4];
     if (hole_ind > 2)       // if not on top, allow move up
-        possible_moves[num_moves++] = hole_ind - 3;
+        moves[num_moves++] = hole_ind - 3;
     if (hole_ind < 6)       // if not on bottom, allow move down
-        possible_moves[num_moves++] = hole_ind + 3;
+        moves[num_moves++] = hole_ind + 3;
     if (hole_ind % n != 0)  // if not on right col, allow move right
-        possible_moves[num_moves++] = hole_ind - 1;
+        moves[num_moves++] = hole_ind - 1;
     if (hole_ind % n != 2) // if not on left col, allow move left
-        possible_moves[num_moves++] = hole_ind + 1;
-    //int moves = new int[num_moves];
-    int* moves = new int[num_moves];
-    for (int move_num{ 0 }; move_num < num_moves; move_num++)
-        moves[move_num] = possible_moves[move_num];
-    delete[] possible_moves;
-    return moves;
+        moves[num_moves++] = hole_ind + 1;
 }
 
 void Puzzle::scramble(const int &moves) { // scrambles a puzzle
