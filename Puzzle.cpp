@@ -174,9 +174,8 @@ void Puzzle::scramble(const int &moves) { // scrambles a puzzle
             options[num_options++] = hole_ind + 1; 
         
         int move_to = options[rand() % 4];
-        if (move_to == 9) move_to = options[rand() % 3];
-        if (move_to == 9) move_to = options[rand() % 2];
-        this->slide(move_to);
+        if (move_to != 9)
+            this->slide(move_to);
     }
 }
 
