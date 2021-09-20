@@ -10,6 +10,7 @@
 #include "Search.h"
 #include <chrono>
 #include <iomanip>
+#include <stdlib.h>
 using std::cout;
 using std::cin;
 using std::endl;
@@ -40,6 +41,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
 /// <returns>default 1 if no errors</returns>
 int main()
 {
+    srand(time(0));                 // we seed the random number generator only once
     clock_t start, end;             // for timing our algorithms
     
     /// testing our searches
@@ -53,10 +55,11 @@ int main()
     cout << "Trial" << setw(10);
     cout << "Depth:" << setw(20);  // formatting
     cout << "Time to solve" << setw(20) << endl; 
-    for (int trial{ 0 }; trial < trials; trial++) {
+    Puzzle puzzle("12345678-");
+    for (int trial{ 1 }; trial < trials; trial++) {
         cout << setw(0);
-        Puzzle puzzle("12345678-");
         puzzle.scramble(scramble_depth);
+        // cout << puzzle.as_string() << endl;  // getting same puzzle?
         start = clock();
         vector<string> solution_path = breadth_first_search(puzzle.as_string());
         end = clock();
@@ -65,6 +68,7 @@ int main()
         depth_sum += depth;         // keep track of totals
         time_sum += time;
 
+        puzzle.reset();
         cout << trial << setw(10) <<// output stats
                 depth << setw(20) <<
                 time << setw(20) << endl;

@@ -82,6 +82,15 @@ public:
 	Puzzle(const Puzzle& puz);
 	~Puzzle();					// destructor
 
+	///// member f(x)s /////
+
+	/// <summary>
+	/// sets puzzle to solution state
+	/// </summary>
+	/// <param name="rhs"></param>
+	/// <returns></returns>
+	void reset();
+
 	///// operator overloads (as member f(x)s /////
 	
 	/// <summary>
@@ -93,19 +102,13 @@ public:
 	bool operator==(const Puzzle& rhs) const;
 
 	///// helper methods ////
-	/// <summary>
-	/// returns the value of the nth 
-	/// tile of the Puzzle
-	/// </summary>
-	/// <returns>int</returns>
-	int get_nth(int& index) const;
 
 	/// <summary>
 	/// returns a c-style string 
 	/// representation of a Puzzle
 	/// </summary>
 	/// <returns></returns>
-	char* as_chars() const;
+	// char* as_chars() const;
 
 	/// <summary>
 	/// returns a pointer to a std::string 

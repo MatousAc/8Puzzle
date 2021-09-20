@@ -20,6 +20,7 @@ Puzzle::Puzzle()
             7, 8, 0 },
     hole_ind{8} {}
 
+
 Puzzle::Puzzle(const char *chars) // char arr to int arr
     : hole_ind {0} {
     if (!chars)           // check for empty string
@@ -78,6 +79,16 @@ Puzzle::Puzzle(const Puzzle& puz) // copy constructor
 Puzzle::~Puzzle() {
 }
 
+void Puzzle::reset() {
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            grid[row][col] = ((row * n) + col + 1) % 9;
+        }
+    }
+    hole_ind = 8;
+}
 
 ///// operator overloads /////
 
@@ -107,16 +118,13 @@ bool Puzzle::operator==(const Puzzle &rhs) const { // equality overload
 
 ///// helper methods /////
 
-int Puzzle::get_nth(int& index) const {
-    return (grid[index / n][index % n]);
-}
-
 void Puzzle::slide(int tile_ind) { // swaps elements @ these indices
     grid[hole_ind / n][hole_ind % n] = (*grid)[tile_ind];
     grid[tile_ind / n][tile_ind % n] = 0;
     hole_ind = tile_ind;
 }
 
+/*
 char* Puzzle::as_chars() const {
     char* chars = new char[10];  // a place for each tile and one for the end
     chars[9] = '\0';
@@ -131,19 +139,23 @@ char* Puzzle::as_chars() const {
     }
     return chars;
 }
+*/
 
 string Puzzle::as_string() const { // Puzzle to string convert
-    string str{this->as_chars()};
+    char* chars = new char[10];  // a place for each tile and one for the end
+    chars[9] = '\0';
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            // taking every tile value and putting it back into a character array
+            int val = grid[row][col];
+            chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
+        }
+    }
+    string str{chars};
+    delete[] chars;
     return str;
-//    for (int row = 0; row < n; row++)
-//    {
-//        for (int col = 0; col < n; col++)
-//        {
-//            // taking every tile value and putting it back into a character array
-//            int val = grid[row][col];
-//            chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
-//        }
-//    }
 }
 
 void Puzzle::set_legal_moves(int moves[]) {
@@ -159,7 +171,7 @@ void Puzzle::set_legal_moves(int moves[]) {
 }
 
 void Puzzle::scramble(const int &moves) { // scrambles a puzzle
-    srand(time(0));
+    
     for (int move_num{ 0 }; move_num < moves; move_num++) {
         // get legal options for this puzzle
         int num_options{ 0 };
@@ -171,11 +183,14 @@ void Puzzle::scramble(const int &moves) { // scrambles a puzzle
         if (hole_ind % 3 != 0)  // if not on right col, allow move right
             options[num_options++] = hole_ind - 1;
         if (hole_ind % 3 != 2) // if not on left col, allow move left
-            options[num_options++] = hole_ind + 1; 
-        
-        int move_to = options[rand() % 4];
-        if (move_to != 9)
-            this->slide(move_to);
+            options[num_options++] = hole_ind + 1;
+
+        int random = rand();
+        // cout << random % 4 << endl;
+        int move_to = options[random % 4];
+        if (move_to == 9) move_to = options[random % 3];
+        if (move_to == 9) move_to = options[random % 2];
+        this->slide(move_to);
     }
 }
 
