@@ -2,7 +2,7 @@
 //  Assignment number: 1
 //  Assignment: 8-Puzzle-Search
 //  File name: Search.cpp
-//  Date last modified: September 16, 2021
+//  Date last modified: September 22, 2021
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 /// this file has search functions in it
@@ -33,21 +33,10 @@ std::vector<string> breadth_first_search(const string& seq) {
         puzzle = puzzles[queue_index++];            // get next puzzle
         string parent_str = puzzle->as_string();    // to insert into the tree
 
-
         // get legal moves for this puzzle
-        int num_moves{ 0 };
+        // int num_moves{ 0 };
         int moves[5]{ 9 };                          // begin with no moves (9 is like null in this case)
-        //puzzle->set_legal_moves(moves);             // set the legal moves for this puzzle
-        int hole_ind = puzzle->get_hole();
-        if (hole_ind > 2)                           // if not on top, allow move up
-            moves[num_moves++] = hole_ind - 3;
-        if (hole_ind < 6)                           // if not on bottom, allow move down
-            moves[num_moves++] = hole_ind + 3;
-        if (hole_ind % 3 != 0)                      // if not on right col, allow move right
-            moves[num_moves++] = hole_ind - 1;
-        if (hole_ind % 3 != 2)                      // if not on left col, allow move left
-            moves[num_moves++] = hole_ind + 1;
-
+        puzzle->set_legal_moves(moves);             // set the legal moves for this puzzle
         for (int move : moves) {                    // for each move:
             if (move == 9) break;                   // if no more moves, move to next in queue
             /// add new puzzle to list. modify puzzle with last move
@@ -70,7 +59,7 @@ std::vector<string> breadth_first_search(const string& seq) {
     }
 finish:
     delete problem;                                 // dereference the puzzle
-    return past(tree);
+    return past(tree);                              // return path to current state (solution)
 }
 
 

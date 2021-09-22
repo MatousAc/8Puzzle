@@ -2,7 +2,7 @@
 //  Assignment number: 1
 //  Assignment: 8-Puzzle-Search
 //  File name: Puzzle.cpp
-//  Date last modified: September 16, 2021
+//  Date last modified: September 22, 2021
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 #include "Puzzle.h"
@@ -157,28 +157,13 @@ void Puzzle::scramble(const int &moves) { // scrambles a puzzle
     
     for (int move_num{ 0 }; move_num < moves; move_num++) {
         // get legal options for this puzzle
-        int num_options{ 0 };
-        int options[]{ 9, 9, 9, 9 };                  // begin with no options
-        if (hole_ind > 2)       // if not on top, allow move up
-            options[num_options++] = hole_ind - 3;
-        if (hole_ind < 6)       // if not on bottom, allow move down
-            options[num_options++] = hole_ind + 3;
-        if (hole_ind % 3 != 0)  // if not on right col, allow move right
-            options[num_options++] = hole_ind - 1;
-        if (hole_ind % 3 != 2) // if not on left col, allow move left
-            options[num_options++] = hole_ind + 1;
+        int moves[5]{ 9 };
+        this->set_legal_moves(moves);
 
         int random = rand();
-        // cout << random % 4 << endl;
-        int move_to = options[random % 4];
-        if (move_to == 9) move_to = options[random % 3];
-        if (move_to == 9) move_to = options[random % 2];
+        int move_to = moves[random % 4];
+        if (move_to == 9) move_to = moves[random % 3];
+        if (move_to == 9) move_to = moves[random % 2];
         this->slide(move_to);
     }
-}
-
-///// getter /////
-
-int Puzzle::get_hole() const { // hole_ind getter
-    return hole_ind;
 }

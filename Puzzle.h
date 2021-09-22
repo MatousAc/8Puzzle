@@ -1,8 +1,8 @@
 //  Name: Ac Hybl
 //  Assignment number: 1
 //  Assignment: 8-Puzzle-Search
-//  File name: Puzzle.cpp
-//  Date last modified: September 16, 2021
+//  File name: Puzzle.h
+//  Date last modified: September 22, 2021
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 #pragma once
@@ -104,13 +104,6 @@ public:
 	///// helper methods ////
 
 	/// <summary>
-	/// returns a c-style string 
-	/// representation of a Puzzle
-	/// </summary>
-	/// <returns></returns>
-	// char* as_chars() const;
-
-	/// <summary>
 	/// returns a pointer to a std::string 
 	/// representation of a Puzzle
 	/// </summary>
@@ -126,10 +119,11 @@ public:
 	void slide(int tile_ind);
 
 	/// <summary>
-	/// returns indices of all the tiles
+	/// takes an in array and populates
+	/// it with indices of all the tiles
 	/// that can currently slide into
-	/// the empty space (0). it encodes
-	/// them into a 4-digit integer
+	/// the empty space (0) with respect
+	/// to "this" puzzle. 
 	/// </summary>
 	/// <returns></returns>
 	void set_legal_moves(int moves[]);
@@ -140,13 +134,5 @@ public:
 	/// </summary>
 	/// <param name="moves"></param>
 	void scramble(const int &moves);
-
-	///// getter /////
-
-	/// <summary>
-	/// fetches hole_ind
-	/// </summary>
-	/// <returns></returns>
-	int get_hole() const;
 };
 

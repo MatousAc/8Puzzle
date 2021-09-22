@@ -2,22 +2,17 @@
 //  Assignment number: 1
 //  Assignment: 8-Puzzle-Search
 //  File name: 8-Puzzle-Search.cpp
-//  Date last modified: September 16, 2021
+//  Date last modified: September 22, 2021
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 #include "Puzzle.h"
 #include <iostream>
 #include "Search.h"
 #include <chrono>
-#include <iomanip>
-#include <cstdio>
 #include <stdlib.h>
 using std::cout;
 using std::cin;
 using std::endl;
-using std::setw;
-using std::fixed;
-using std::setprecision;
 using std::vector;
 
 /// the below code is directly taken from the 
@@ -59,7 +54,7 @@ int main()
         string alg;     // algorithm to use
         // what algorithm are we using?
         cout << "enter algorithm you want to test.\n" <<
-            "(breadth, best, or a*.\nother input terminates program)\n";
+            "breadth, best, or a*.\nother input terminates program\n";
         cin >> alg;
         if ((alg != "breadth") and (alg != "best") and (alg != "a*"))
             break;      // if not an algorithm, break;
@@ -86,7 +81,6 @@ int main()
         cout << "Trial     Depth  Solve Time\n";
         Puzzle puzzle("12345678-");
         for (int trial{ 1 }; trial <= trials; trial++) {
-            cout << setw(0);
             puzzle.scramble(scramble_depth);
             start = clock();
             vector<string> solution_path = breadth_first_search(puzzle.as_string());
@@ -103,8 +97,8 @@ int main()
             printf("%*.3f\n", 12, time);
         }
         cout << "~~~~~~~~~ Average ~~~~~~~~~\n";
-        printf("%*d%*d%*.3f\n", 
+        printf("%*d%*.2f%*.3f\n", 
             5, trials, 
-            10, depth_sum / trials, 
+            10, (float)depth_sum / trials, 
             12, time_sum / trials);
     }
