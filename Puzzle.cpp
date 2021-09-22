@@ -7,6 +7,7 @@
 
 #include "Puzzle.h"
 #include <iostream>
+#include <cmath>
 using std::cout;
 using std::cin;
 using std::endl;
@@ -90,6 +91,20 @@ int Puzzle::misplaced_tiles() const {
     }
     return num_mis_tiles;
 }
+
+ int Puzzle::manhattan_distance() const {
+    int distance{ 0 };
+    for (int row{ 0 }; row < 3; row++) {
+        for (int col{ 0 }; col < 3; col++) {
+            int loc = grid[row][col] - 1;   // correct location
+            if (loc >= 0) {                 // if non-negative (wasn't empty tile)
+                distance += std::abs((row - (loc / 3))) + std::abs((col - (loc % 3)));
+            }
+        }
+    }
+    return distance;
+}
+
 
 void Puzzle::reset() {
     for (int row = 0; row < n; row++)
