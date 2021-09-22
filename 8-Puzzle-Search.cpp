@@ -45,10 +45,12 @@ int main()
     srand(time(0));     // we seed the random number generator only once    
     Puzzle puzzle("12345678-");
     puzzle.scramble(100);
-    // cout << puzzle << endl;
-    //cout << puzzle.manhattan();
+    cout << puzzle << endl;
+    cout << puzzle.misplaced_tiles();
+    //cout << puzzle.manhattan_distance();
 
     /// testing our searches for as long as we want
+    /*
     while (true)
     {
         string alg;     // algorithm to use
@@ -60,6 +62,7 @@ int main()
             break;      // if not an algorithm, break;
         test_alg(alg);
     }
+    */
 }
 
     void test_alg(string &alg) {

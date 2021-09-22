@@ -82,7 +82,7 @@ public:
 	Puzzle(const Puzzle& puz);
 	~Puzzle();					// destructor
 
-	///// member f(x)s /////
+	///// member f(x)s/heuristics /////
 
 	/// <summary>
 	/// sets puzzle to solution state
@@ -90,6 +90,19 @@ public:
 	/// <param name="rhs"></param>
 	/// <returns></returns>
 	void reset();
+
+	/// <summary>
+	/// returns the manhattan distance
+	/// for the puzzle as an integer
+	/// </summary>
+	int manhattan_distance() const;
+
+	/// <summary>
+	/// returns the number of tiles 
+	/// that are out of place
+	/// for the puzzle as an integer
+	/// </summary>
+	int misplaced_tiles() const;
 
 	///// operator overloads (as member f(x)s /////
 	

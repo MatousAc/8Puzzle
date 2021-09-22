@@ -79,6 +79,18 @@ Puzzle::Puzzle(const Puzzle& puz) // copy constructor
 Puzzle::~Puzzle() {
 }
 
+int Puzzle::misplaced_tiles() const {
+    int num_mis_tiles{ 0 };
+    for (int row{ 0 }; row < 3; row++) {
+        for (int col{ 0 }; col < 3; col++) {
+            int val = grid[row][col];
+            if (((row * n) + col + 1) != val && (val != 0))
+                num_mis_tiles++;
+        }
+    }
+    return num_mis_tiles;
+}
+
 void Puzzle::reset() {
     for (int row = 0; row < n; row++)
     {
