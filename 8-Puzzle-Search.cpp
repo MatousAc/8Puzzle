@@ -10,11 +10,14 @@
 #include "Search.h"
 #include <chrono>
 #include <iomanip>
+#include <cstdio>
 #include <stdlib.h>
 using std::cout;
 using std::cin;
 using std::endl;
 using std::setw;
+using std::fixed;
+using std::setprecision;
 using std::vector;
 
 /// the below code is directly taken from the 
@@ -36,45 +39,72 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
 
 /// <summary>
 /// This functions mainly tests different search methods
-/// for the 8-Puzzle problem. Tests are timed using ??????
+/// for the 8-Puzzle problem. Tests are timed using the 
+/// chrono library. iomanip is used for some formatted output.
 /// </summary>
 /// <returns>default 1 if no errors</returns>
+void test_alg(string &alg);
+
 int main()
 {
-    srand(time(0));                 // we seed the random number generator only once
-    clock_t start, end;             // for timing our algorithms
-    
-    /// testing our searches
-    int trials, scramble_depth, depth_sum{ 0 };
-    float time_sum{ 0 };
-    cout << "Enter desired random scramble moves: ";
-    cin >> scramble_depth; cout << endl;
-    cout << "Enter number of trials: ";
-    cin >> trials; cout << endl;
-
-    cout << "Trial" << setw(10);
-    cout << "Depth:" << setw(20);  // formatting
-    cout << "Time to solve" << setw(20) << endl; 
+    srand(time(0));     // we seed the random number generator only once    
     Puzzle puzzle("12345678-");
-    for (int trial{ 1 }; trial < trials; trial++) {
-        cout << setw(0);
-        puzzle.scramble(scramble_depth);
-        // cout << puzzle.as_string() << endl;  // getting same puzzle?
-        start = clock();
-        vector<string> solution_path = breadth_first_search(puzzle.as_string());
-        end = clock();
-        float time = ((float)end - start) / CLOCKS_PER_SEC;
-        int depth = solution_path.size();
-        depth_sum += depth;         // keep track of totals
-        time_sum += time;
+    puzzle.scramble(100);
+    // cout << puzzle << endl;
+    //cout << puzzle.manhattan();
 
-        puzzle.reset();
-        cout << trial << setw(10) <<// output stats
-                depth << setw(20) <<
-                time << setw(20) << endl;
+    /// testing our searches for as long as we want
+    while (true)
+    {
+        string alg;     // algorithm to use
+        // what algorithm are we using?
+        cout << "enter algorithm you want to test.\n" <<
+            "(breadth, best, or a*.\nother input terminates program)\n";
+        cin >> alg;
+        if ((alg != "breadth") and (alg != "best") and (alg != "a*"))
+            break;      // if not an algorithm, break;
+        test_alg(alg);
     }
-    cout << setw(0) <<
-            "Avg." << setw(10) <<   // avg stats
-            depth_sum / trials << setw(20) <<
-            time_sum / trials << setw(20) << endl;
 }
+
+    void test_alg(string &alg) {
+        clock_t start, end;         // for timing our algorithms
+        int trials, scramble_depth, depth_sum{ 0 };
+        float time_sum{ 0 };
+
+        // gathering inputs
+        string heuristic{""};       // what heuristic?
+        if ((alg != "breadth")) {
+            cout << "enter heuristic you wish to use (manhattan or tiles)\n";
+            cin >> heuristic;
+        }
+        cout << "enter desired random scramble moves (positive integer):\n";
+        cin >> scramble_depth; cout << endl;
+        cout << "enter number of trials (positive integer):\n";
+        cin >> trials; cout << endl;
+
+        cout << "Trial     Depth  Solve Time\n";
+        Puzzle puzzle("12345678-");
+        for (int trial{ 1 }; trial <= trials; trial++) {
+            cout << setw(0);
+            puzzle.scramble(scramble_depth);
+            start = clock();
+            vector<string> solution_path = breadth_first_search(puzzle.as_string());
+            end = clock();
+            float time = ((float)end - start) / CLOCKS_PER_SEC;
+            // depth = size - 1 because initial node is of depth 0
+            int depth = solution_path.size() - 1;
+            depth_sum += depth;     // keep track of totals
+            time_sum += time;
+
+            puzzle.reset();
+            printf("%*d", 5, trial);
+            printf("%*d", 10, depth);
+            printf("%*.3f\n", 12, time);
+        }
+        cout << "~~~~~~~~~ Average ~~~~~~~~~\n";
+        printf("%*d%*d%*.3f\n", 
+            5, trials, 
+            10, depth_sum / trials, 
+            12, time_sum / trials);
+    }

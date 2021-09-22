@@ -28,6 +28,7 @@ std::vector<string> breadth_first_search(const string& seq) {
 
     Puzzle* puzzle;                                 // initialize current puzzle ptr
     int queue_index{ 0 };                           // to keep track of where we are in the queue
+    if (*problem == solution) goto finish;          // check once for init. state being solved
     while (true) {                                  // do till we have a solution
         puzzle = puzzles[queue_index++];            // get next puzzle
         string parent_str = puzzle->as_string();    // to insert into the tree

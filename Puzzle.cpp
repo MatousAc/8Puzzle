@@ -124,23 +124,6 @@ void Puzzle::slide(int tile_ind) { // swaps elements @ these indices
     hole_ind = tile_ind;
 }
 
-/*
-char* Puzzle::as_chars() const {
-    char* chars = new char[10];  // a place for each tile and one for the end
-    chars[9] = '\0';
-    for (int row = 0; row < n; row++)
-    {
-        for (int col = 0; col < n; col++)
-        {
-            // taking every tile value and putting it back into a character array
-            int val = grid[row][col];
-            chars[(row * n) + col] = val != 0 ? (char)(val + 48) : '-';
-        }
-    }
-    return chars;
-}
-*/
-
 string Puzzle::as_string() const { // Puzzle to string convert
     char* chars = new char[10];  // a place for each tile and one for the end
     chars[9] = '\0';
