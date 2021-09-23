@@ -194,9 +194,3 @@ void Puzzle::scramble(const int &moves) { // scrambles a puzzle
         this->slide(move_to);
     }
 }
-
-///// getter /////
-
-int Puzzle::get_hole() const { // hole_ind getter
-    return hole_ind;
-}
