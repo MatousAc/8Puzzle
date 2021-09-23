@@ -39,68 +39,119 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec) {
 /// </summary>
 /// <returns>default 1 if no errors</returns>
 void test_alg(string &alg);
+/// <summary>
+/// allows a user to test each search
+/// (with heuristics if applicable) on
+/// demand for as long as they want
+/// </summary>
+void manual_test();
+/// <summary>
+/// outputs test results used for submission
+/// of the assignment
+/// </summary>
+void auto_test();
 
 int main()
 {
     srand(time(0));     // we seed the random number generator only once    
+    // Puzzle puzzle("387-15642");
     // Puzzle puzzle("12345678-");
     // puzzle.scramble(100);
     // cout << puzzle << endl;
-    // cout << puzzle.misplaced_tiles() << endl;
-    // cout << puzzle.manhattan_distance() << endl;
+    // vector<string> solution_path = breadth_first_search(puzzle.as_string());
+    // for (string step : solution_path) {
+    //     Puzzle out(step);
+    //     cout << out << endl;
+    // }
+    // cout << "Depth: " << solution_path.size() - 1;
 
+    // Puzzle puzzle("-75314826");
+    // puzzle.scramble(100);
+    // cout << puzzle << endl;
+    // cout << best_first_search(puzzle.as_string(), "tiles") << endl;
+    // puzzle.scramble(100);
+    // cout << puzzle << endl;
+    // cout << best_first_search(puzzle.as_string(), "manhattan") << endl;
 
-    /// testing our searches for as long as we want
-    while (true)
-    {
+    manual_test();
+    return 1;
+}
+
+void manual_test() {
+    while (true) {
         string alg;     // algorithm to use
         // what algorithm are we using?
         cout << "enter algorithm you want to test.\n" <<
             "breadth, best, or a*.\nother input terminates program\n";
         cin >> alg;
         if ((alg != "breadth") and (alg != "best") and (alg != "a*"))
-            break;      // if not an algorithm, break;
+            return;      // if not an algorithm, break;
         test_alg(alg);
     }
 }
 
-    void test_alg(string &alg) {
-        clock_t start, end;         // for timing our algorithms
-        int trials, scramble_depth, depth_sum{ 0 };
-        float time_sum{ 0 };
-
-        // gathering inputs
-        string heuristic{""};       // what heuristic?
-        if ((alg != "breadth")) {
-            cout << "enter heuristic you wish to use (manhattan or tiles)\n";
-            cin >> heuristic;
-        }
-        cout << "enter desired random scramble moves (positive integer):\n";
-        cin >> scramble_depth; cout << endl;
-        cout << "enter number of trials (positive integer):\n";
-        cin >> trials; cout << endl;
-
-        cout << "Trial     Depth  Solve Time\n";
-        Puzzle puzzle("12345678-");
-        for (int trial{ 1 }; trial <= trials; trial++) {
-            puzzle.scramble(scramble_depth);
-            start = clock();
-            vector<string> solution_path = breadth_first_search(puzzle.as_string());
-            end = clock();
-            float time = ((float)end - start) / CLOCKS_PER_SEC;
-            // depth = size - 1 because initial node is of depth 0
-            int depth = solution_path.size() - 1;
-            depth_sum += depth;     // keep track of totals
-            time_sum += time;
-
-            puzzle.reset();
-            printf("%*d", 5, trial);
-            printf("%*d", 10, depth);
-            printf("%*.3f\n", 12, time);
-        }
-        cout << "~~~~~~~~~ Average ~~~~~~~~~\n";
-        printf("%*d%*.2f%*.3f\n", 
-            5, trials, 
-            10, (float)depth_sum / trials, 
-            12, time_sum / trials);
+void auto_test() {
+    vector<string> algs{ "breadth", "best", "a*" };
+    for (string alg: algs) {
+        string alg;     // algorithm to use
+        // what algorithm are we using?
+        cout << "enter algorithm you want to test.\n" <<
+            "breadth, best, or a*.\nother input terminates program\n";
+        cin >> alg;
+        if ((alg != "breadth") and (alg != "best") and (alg != "a*"))
+            return;      // if not an algorithm, break;
+        test_alg(alg);
     }
+}
+
+void test_alg(string &alg) {
+    clock_t start, end;         // for timing our algorithms
+    int trials, scramble_depth, depth_sum{ 0 };
+    float time_sum{ 0 };
+
+    // gathering inputs
+    string heuristic;
+    //int (Puzzle::*heuristic)() const= Puzzle::misplaced_tiles;
+    if ((alg != "breadth")) {
+        cout << "enter heuristic you wish to use (manhattan or tiles)\n";
+        cin >> heuristic;
+        if ((heuristic != "manhattan") and (heuristic != "tiles"))
+            return;
+    }
+    cout << "enter desired random scramble moves (positive integer):\n";
+    cin >> scramble_depth; cout << endl;
+    cout << "enter number of trials (positive integer):\n";
+    cin >> trials; cout << endl;
+
+    cout << "Trial     Depth  Solve Time\n";
+    Puzzle puzzle("12345678-");
+    for (int trial{ 1 }; trial <= trials; trial++) {
+        puzzle.scramble(scramble_depth);
+        string puz_str = puzzle.as_string();
+        vector<string> solution_path;
+        start = clock();
+        if (alg == "breadth")
+            solution_path = breadth_first_search(puz_str);
+        else if (alg == "best")
+            solution_path = best_first_search(puz_str, heuristic);
+        else
+            solution_path = a_star_search(puz_str, heuristic);
+        end = clock();
+        float time = ((float)end - start) / CLOCKS_PER_SEC;
+        // depth = size - 1 because initial node is of depth 0
+        int depth = solution_path.size() - 1;
+        depth_sum += depth;     // keep track of totals
+        time_sum += time;
+        puzzle.reset();
+
+        // cout << solution_path << endl;
+        printf("%*d", 5, trial);
+        printf("%*d", 10, depth);
+        printf("%*.3f\n", 12, time);
+    }
+    cout << "~~~~~~~~~ Average ~~~~~~~~~\n";
+    printf("%*d%*.2f%*.3f\n", 
+        5, trials, 
+        10, (float)depth_sum / trials, 
+        12, time_sum / trials);
+}

@@ -14,7 +14,7 @@
 priority_queue::priority_queue() {//constructor
     head = NULL;            // head starts as nothing
 }
-void priority_queue::insert(Puzzle* puz, string heuristic, int depth = 0) {
+void priority_queue::insert(Puzzle* puz, string heuristic, int depth) {
     int priority{ 0 };
     if (heuristic == "tiles")// since depth is always 0 in best first, we can always add it
         priority = puz->misplaced_tiles() + depth;

@@ -36,11 +36,20 @@ std::vector<string> breadth_first_search(const string& problem);
 /// </summary>
 /// <param name="problem"></param>
 /// <returns></returns>
-std::vector<string> best_first_search(const string& problem);
+std::vector<string> best_first_search(const string& problem, const string& heuristic);
 /// <summary>
 /// implements a* search
 /// </summary>
 /// <param name="problem"></param>
 /// <returns></returns>
-std::vector<string> a_star_search(const string& problem);
+std::vector<string> a_star_search(const string& problem, const string& heuristic);
+/// <summary>
+/// this consolidates the logic for breadth first
+/// search and a* search. only difference is that
+/// depth is incremented when used in one and not the other
+/// </summary>
+/// <param name="seq"></param>
+/// <param name="heuristic"></param>
+/// <returns></returns>
+std::vector<string> a_best(const string& seq, const string& heuristic, bool depth_flag = false);
 #endif

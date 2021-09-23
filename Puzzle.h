@@ -147,5 +147,10 @@ public:
 	/// </summary>
 	/// <param name="moves"></param>
 	void scramble(const int &moves);
+	/// <summary>
+	/// fetches hole_ind
+	/// </summary>
+	/// <returns></returns>
+	int get_hole() const;
 };
 
