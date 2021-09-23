@@ -184,7 +184,7 @@ void Puzzle::scramble(const int &moves) { // scrambles a puzzle
     
     for (int move_num{ 0 }; move_num < moves; move_num++) {
         // get legal options for this puzzle
-        int moves[5]{ 9 };
+        int moves[5] = { 9, 9, 9, 9, 9 };
         this->set_legal_moves(moves);
 
         int random = rand();
@@ -193,4 +193,10 @@ void Puzzle::scramble(const int &moves) { // scrambles a puzzle
         if (move_to == 9) move_to = moves[random % 2];
         this->slide(move_to);
     }
+}
+
+///// getter /////
+
+int Puzzle::get_hole() const { // hole_ind getter
+    return hole_ind;
 }
