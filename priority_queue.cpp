@@ -1,17 +1,30 @@
+//  Name: Ac Hybl
+//  Assignment number: 1
+//  Assignment: 8-Puzzle-Search
+//  File name: priority_queue.cpp
+//  Date last modified: September 22, 2021
+//  Honor statement: I have neither given nor received any unauthorized help on this assignment.
+
 // This code is heavily adapted from technical-recipes.com
 // It barely resembles the original, but I still should give
-// credit for the idea.
+// some credit for the idea of structuring a pq like this.
 // https://www.tutorialspoint.com/cplusplus-program-to-implement-priority-queue
 
 #include "priority_queue.h"
 priority_queue::priority_queue() {//constructor
     head = NULL;            // head starts as nothing
 }
-void priority_queue::insert(Puzzle* puz, int priority) {
-    node* t, * q;           // temp node ptrs
+void priority_queue::insert(Puzzle* puz, string heuristic, int depth = 0) {
+    int priority{ 0 };
+    if (heuristic == "tiles")// since depth is always 0 in best first, we can always add it
+        priority = puz->misplaced_tiles() + depth;
+    else if (heuristic == "manhattan")
+        priority = puz->manhattan_distance() + depth;
+    node* t, * q;           // temp node ptrs           // by default depth = 0
     t = new node;
     t->priority = priority; // give it a priority
     t->puz = puz;           // associate it with puzzleptr
+    t->depth = depth;       // give it it's depth
     if (head == NULL || priority < head->priority) {
         t->next = head;     // put t out front if it has lowest priority
         head = t;
@@ -25,19 +38,18 @@ void priority_queue::insert(Puzzle* puz, int priority) {
     }
 }
 
-Puzzle* priority_queue::get_top() {
+node* priority_queue::get_top() {
     Puzzle* puz;
-    node* del;
+    node* temp;
     if (head == NULL) {
         cout << "Queue Underflow\n";
         cout << this->size();
     }
     else {
         puz = head->puz;    // get first puzzle
-        del = head;
+        temp = head;        // we have to deallocate this memory elsewhere
         head = head->next;  // move head next node
-        delete del;         // deallocate memory
-        return puz;
+        return temp;
     }
 }
 
