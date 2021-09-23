@@ -33,12 +33,14 @@ std::vector<string> past(unordered_map<string, string>& tree);
 std::vector<string> breadth_first_search(const string& problem);
 /// <summary>
 /// implements best first search
+/// (calls a_best without depth)
 /// </summary>
 /// <param name="problem"></param>
 /// <returns></returns>
 std::vector<string> best_first_search(const string& problem, const string& heuristic);
 /// <summary>
 /// implements a* search
+/// (calls a_best with depth)
 /// </summary>
 /// <param name="problem"></param>
 /// <returns></returns>
